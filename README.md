@@ -1,6 +1,11 @@
 # fooddeliveryapplication
 
+# Start the app locally;
+- To start the app locally use command "npm start"
 # Routes
+
+## Basic route
+- http://localhost:8000/
 
 ## User Routes
 
@@ -65,9 +70,9 @@
 
 
             response:{
-            "Message": "Login Successfull",
+            "message": "Login Successfull",
 
-            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NDc4M2E0OGNhZDY3OWYwMTcwYmI2NjEiLCJpYXQiOjE2ODU2MDE1NDB9.MoqfyVozBO9L_RUq4SxHWBDWovlqYnXQyHsF8t5yMc0"
+            "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NDc4M2E0OGNhZDY3OWYwMTcwYmI2NjEiLCJpYXQiOjE2ODU2MDE1NDB9.MoqfyVozBO9L_RUq4SxHWBDWovlqYnXQyHsF8t5yMc0"
             }
 
 - Token will be generated using json-web-token and secrete key will be inserted.
@@ -81,13 +86,13 @@
 - PATCH /user//api/orders/:id
 - userID will be taken from params
       body:{
-        curr_pass:String,
-        new_pass:String
+        password:String,
+        newPassword:String
       }
 
 ### Response :
 
-- Starus(204).
+- Status(204).
 - password will be updated
 
 
