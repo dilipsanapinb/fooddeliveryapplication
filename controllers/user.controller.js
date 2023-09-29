@@ -49,30 +49,65 @@ exports.registerUser = async (req, res) => {
 };
 
 exports.loginUser = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).json({
-        message: "User Does't Exists",
-      });
-    }
-    const hashPassword = user.password;
-    bcrypt.compare(password, hashPassword, async function (err, result) {
-      if (result) {
-        const accessToken = jwt.sign({ userId: user._id }, process.env.secrete);
-        res
-          .status(201)
-          .json({ message: "Logged In Successfully", accessToken });
-      } else {
-        console.log(err);
-        res.status(404).json({
-          message: "Somethin went wrong at comparing the password",
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({
+                message: "User Does't Exists",
+            });
+        }
+        const hashPassword = user.password;
+        bcrypt.compare(password, hashPassword, async function (err, result) {
+            if (result) {
+                const accessToken = jwt.sign({ userId: user._id }, process.env.secrete);
+                res
+                    .status(201)
+                    .json({ message: "Logged In Successfully", accessToken });
+            } else {
+                console.log(err);
+                res.status(404).json({
+                    message: "Somethin went wrong at comparing the password",
+                });
+            }
         });
-      }
-    });
-  } catch (error) {
-    console.log(error.message);
-    res.status(500).json({ message: "Something went wrong at login the user" });
-  }
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ message: "Something went wrong at login the user" });
+    }
+};
+
+// reset password;
+
+exports.resetPassword = async (req, res) => {
+    try {
+        const { password, newPassword } = req.body;
+        const { userId } = req.params;
+        const user = await User.findOne({ _id:userId });
+        if (!user) {
+            return res.status(404).json({
+                message: "User Does't Exists",
+            });
+        }
+        const newPasswordHshed = await bcrypt.hash(newPassword, 10)
+        const hashPassword = user.password;
+        bcrypt.compare(password, hashPassword, async function (err, result) {
+            if (result) {
+                await User.findByIdAndUpdate(userId , { "password": newPasswordHshed });
+                res
+                    .status(204)
+                    .json({ message: "Password Updated Successfully" });
+            } else {
+                console.log(err);
+                res.status(404).json({
+                    message: "Old password does not match",
+                });
+            }
+        })
+    } catch (error) {
+        console.log(error.message);
+        res
+            .status(500)
+            .json({ message: "Something went wrong at reset the password" });
+    }
 };
