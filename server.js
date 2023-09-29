@@ -1,7 +1,8 @@
 const express = require("express");
 require("dotenv").config();
 const connection = require("./config/db");
-const userRoutes=require('./routes/user.routes')
+const userRoutes = require('./routes/user.routes');
+const restaurantRoutes = require('./routes/restaurant.routes');
 const app = express();
 const port = process.env.port;
 
@@ -15,6 +16,7 @@ app.get('/', (req, res) => {
 
 
 app.use('/user', userRoutes);
+app.use('/restaurant', restaurantRoutes);
 
 app.listen(port, async () => {
     try {
